@@ -18,6 +18,9 @@ const __dirname = path.dirname(__filename);
 // Serve the public folder
 app.use(express.static(path.join(__dirname, "../public")));
 
+// Serve the installed Leaflet library (CSS, JS, marker images)
+app.use("/leaflet", express.static(path.join(__dirname, "../node_modules/leaflet/dist")));
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });

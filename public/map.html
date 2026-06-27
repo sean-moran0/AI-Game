@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map Test</title>
+  <link rel="stylesheet" href="/leaflet/leaflet.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    #map { height: 100dvh; width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script src="/leaflet/leaflet.js"></script>
+  <script>
+    // Center on London as a sample location
+    const map = L.map('map').setView([51.505, -0.09], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors',
+    }).addTo(map);
+
+    L.marker([51.505, -0.09])
+      .addTo(map)
+      .bindPopup('Sample marker')
+      .openPopup();
+  </script>
+</body>
+</html>
