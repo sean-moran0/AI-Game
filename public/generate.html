@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map Generator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      min-height: 100dvh;
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    #panel {
+      width: 280px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    h1 { font-size: 18px; font-weight: 600; }
+
+    .control {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+    }
+
+    .control label {
+      display: flex;
+      justify-content: space-between;
+      color: #b0b0b0;
+    }
+
+    .control label .val { color: #6fa8e0; font-variant-numeric: tabular-nums; }
+
+    .control input[type="range"] { width: 100%; accent-color: #2f6fd8; }
+
+    .control input[type="number"] {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #3a3a3a;
+      background: #2a2a2a;
+      color: #e0e0e0;
+      font-size: 13px;
+    }
+
+    .row { display: flex; gap: 8px; align-items: center; }
+    .row label { flex: 1; }
+
+    button {
+      padding: 9px 14px;
+      border-radius: 7px;
+      border: none;
+      background: #2f6fd8;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    button:hover { background: #3a7fe8; }
+    button.secondary { background: #3a3a3a; }
+    button.secondary:hover { background: #4a4a4a; }
+
+    #stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    #map-canvas {
+      image-rendering: pixelated;
+      border: 1px solid #3a3a3a;
+      border-radius: 8px;
+      width: 640px;
+      height: 640px;
+      max-width: 100%;
+      background: #0d0d0d;
+    }
+
+    #legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      font-size: 12px;
+      color: #b0b0b0;
+      max-width: 640px;
+    }
+    #legend .item { display: flex; align-items: center; gap: 5px; }
+    #legend .swatch { width: 13px; height: 13px; border-radius: 3px; border: 1px solid #00000055; }
+
+    .divider { height: 1px; background: #2a2a2a; margin: 2px 0; }
+  </style>
+</head>
+<body>
+  <div id="panel">
+    <h1>Map Generator</h1>
+
+    <div class="control">
+      <div class="row">
+        <label for="seed">Seed</label>
+        <input type="number" id="seed" value="1337" style="width: 110px;">
+        <button class="secondary" id="randomize" style="padding: 6px 10px;">🎲</button>
+      </div>
+    </div>
+
+    <div class="control">
+      <label for="gridSize">Resolution <span class="val" id="gridSize-val"></span></label>
+      <input type="range" id="gridSize" min="32" max="160" step="8" value="96">
+    </div>
+
+    <div class="control">
+      <label for="frequency">Frequency <span class="val" id="frequency-val"></span></label>
+      <input type="range" id="frequency" min="0.01" max="0.15" step="0.005" value="0.045">
+    </div>
+
+    <div class="control">
+      <label for="octaves">Octaves <span class="val" id="octaves-val"></span></label>
+      <input type="range" id="octaves" min="1" max="8" step="1" value="5">
+    </div>
+
+    <div class="control">
+      <label for="persistence">Persistence <span class="val" id="persistence-val"></span></label>
+      <input type="range" id="persistence" min="0.2" max="0.8" step="0.05" value="0.5">
+    </div>
+
+    <div class="control">
+      <label for="lacunarity">Lacunarity <span class="val" id="lacunarity-val"></span></label>
+      <input type="range" id="lacunarity" min="1.5" max="3.5" step="0.1" value="2.0">
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="control">
+      <label for="waterLevel">Water level <span class="val" id="waterLevel-val"></span></label>
+      <input type="range" id="waterLevel" min="0.1" max="0.7" step="0.01" value="0.38">
+    </div>
+
+    <div class="control">
+      <div class="row">
+        <label for="island">Island falloff</label>
+        <input type="checkbox" id="island" checked>
+      </div>
+    </div>
+
+    <div class="control">
+      <label for="islandStrength">Falloff strength <span class="val" id="islandStrength-val"></span></label>
+      <input type="range" id="islandStrength" min="0" max="2" step="0.1" value="1.0">
+    </div>
+
+    <div class="divider"></div>
+
+    <button id="generate">Generate</button>
+    <button class="secondary" id="export">Export GeoJSON</button>
+  </div>
+
+  <div id="stage">
+    <canvas id="map-canvas"></canvas>
+    <div id="legend"></div>
+  </div>
+
+  <script type="module" src="/generate.js"></script>
+</body>
+</html>

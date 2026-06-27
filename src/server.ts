@@ -21,6 +21,9 @@ app.use(express.static(path.join(__dirname, "../public")));
 // Serve the installed Leaflet library (CSS, JS, marker images)
 app.use("/leaflet", express.static(path.join(__dirname, "../node_modules/leaflet/dist")));
 
+// Serve the installed simplex-noise ESM build for the map generator
+app.use("/simplex-noise", express.static(path.join(__dirname, "../node_modules/simplex-noise/dist/esm")));
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });

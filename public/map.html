@@ -3,30 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Map Test</title>
+  <title>Map Viewer</title>
   <link rel="stylesheet" href="/leaflet/leaflet.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
-    #map { height: 100dvh; width: 100%; }
+    body { font-family: system-ui, sans-serif; background: #1a1a1a; color: #e0e0e0; }
+
+    #toolbar {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #1f1f1fee;
+      border: 1px solid #3a3a3a;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    #toolbar label.file-btn {
+      padding: 7px 12px;
+      border-radius: 6px;
+      background: #2f6fd8;
+      color: #fff;
+      cursor: pointer;
+    }
+    #toolbar label.file-btn:hover { background: #3a7fe8; }
+    #toolbar input[type="file"] { display: none; }
+    #status { color: #b0b0b0; }
+
+    #map { height: 100dvh; width: 100%; background: #0d0d0d; }
   </style>
 </head>
 <body>
+  <div id="toolbar">
+    <label class="file-btn">
+      Load GeoJSON
+      <input type="file" id="file" accept=".geojson,.json,application/geo+json,application/json">
+    </label>
+    <span id="status">No map loaded</span>
+  </div>
   <div id="map"></div>
+
   <script src="/leaflet/leaflet.js"></script>
   <script>
-    // Center on London as a sample location
-    const map = L.map('map').setView([51.505, -0.09], 13);
+    // Terrain fill colors — must match the exporter in generate.js.
+    const TERRAIN_COLORS = {
+      deepWater: '#163d5c',
+      water:     '#2a6f97',
+      beach:     '#e0d8a8',
+      grass:     '#5a9d4a',
+      forest:    '#356a2a',
+      mountain:  '#7a6f63',
+      snow:      '#f2f2f2',
+    };
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap contributors',
-    }).addTo(map);
+    // Game maps use a plain X/Y plane, not geographic lat/lng.
+    const map = L.map('map', {
+      crs: L.CRS.Simple,
+      minZoom: -5,
+      zoomSnap: 0.25,
+    });
+    map.setView([0, 0], 0);
 
-    L.marker([51.505, -0.09])
-      .addTo(map)
-      .bindPopup('Sample marker')
-      .openPopup();
+    const status = document.getElementById('status');
+    let layer = null;
+
+    function styleFeature(feature) {
+      const terrain = feature.properties && feature.properties.terrain;
+      return {
+        fillColor: TERRAIN_COLORS[terrain] || '#888888',
+        fillOpacity: 1,
+        weight: 0,
+        // No visible stroke, but keep a matching color for anti-alias seams.
+        color: TERRAIN_COLORS[terrain] || '#888888',
+      };
+    }
+
+    function onEachFeature(feature, lyr) {
+      const p = feature.properties || {};
+      lyr.bindPopup(
+        `Terrain: ${p.terrain ?? 'unknown'}<br>` +
+        `Water: ${p.water ?? '—'}<br>` +
+        `Elevation: ${p.elevation ?? '—'}`
+      );
+    }
+
+    function loadGeoJSON(geojson) {
+      if (layer) {
+        map.removeLayer(layer);
+        layer = null;
+      }
+      layer = L.geoJSON(geojson, {
+        style: styleFeature,
+        onEachFeature,
+      }).addTo(map);
+
+      const bounds = layer.getBounds();
+      if (bounds.isValid()) {
+        map.fitBounds(bounds);
+      }
+      const count = geojson.features ? geojson.features.length : 0;
+      status.textContent = `${count} features loaded`;
+    }
+
+    document.getElementById('file').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      status.textContent = `Loading ${file.name}…`;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          loadGeoJSON(JSON.parse(reader.result));
+        } catch (err) {
+          status.textContent = `Error: ${err.message}`;
+        }
+      };
+      reader.onerror = () => { status.textContent = 'Error reading file'; };
+      reader.readAsText(file);
+    });
   </script>
 </body>
 </html>
