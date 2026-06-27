@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Map Viewer</title>
+  <title>AI Game — Map Viewer</title>
   <link rel="stylesheet" href="/leaflet/leaflet.css">
+  <link rel="stylesheet" href="/nav.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body { font-family: system-ui, sans-serif; background: #1a1a1a; color: #e0e0e0; }
+    .page.map { display: flex; }
 
     #toolbar {
       position: absolute;
@@ -36,18 +35,21 @@
     #toolbar input[type="file"] { display: none; }
     #status { color: #b0b0b0; }
 
-    #map { height: 100dvh; width: 100%; background: #0d0d0d; }
+    #map { flex: 1; background: #0d0d0d; }
   </style>
 </head>
 <body>
-  <div id="toolbar">
-    <label class="file-btn">
-      Load GeoJSON
-      <input type="file" id="file" accept=".geojson,.json,application/geo+json,application/json">
-    </label>
-    <span id="status">No map loaded</span>
-  </div>
-  <div id="map"></div>
+  <script src="/nav.js"></script>
+  <main class="page map">
+    <div id="toolbar">
+      <label class="file-btn">
+        Load GeoJSON
+        <input type="file" id="file" accept=".geojson,.json,application/geo+json,application/json">
+      </label>
+      <span id="status">No map loaded</span>
+    </div>
+    <div id="map"></div>
+  </main>
 
   <script src="/leaflet/leaflet.js"></script>
   <script>
@@ -68,6 +70,8 @@
       minZoom: -5,
       zoomSnap: 0.25,
     });
+    // Keep zoom buttons clear of the load toolbar (both default to top-left).
+    map.zoomControl.setPosition('topright');
     map.setView([0, 0], 0);
 
     const status = document.getElementById('status');

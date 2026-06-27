@@ -3,18 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Map Generator</title>
+  <title>AI Game — Map Generator</title>
+  <link rel="stylesheet" href="/nav.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: system-ui, sans-serif;
-      background: #1a1a1a;
-      color: #e0e0e0;
-      min-height: 100dvh;
+    .page.gen {
       display: flex;
       gap: 20px;
       padding: 20px;
+      overflow: auto;
     }
 
     #panel {
@@ -102,6 +98,8 @@
   </style>
 </head>
 <body>
+  <script src="/nav.js"></script>
+  <main class="page gen">
   <div id="panel">
     <h1>Map Generator</h1>
 
@@ -167,6 +165,7 @@
     <canvas id="map-canvas"></canvas>
     <div id="legend"></div>
   </div>
+  </main>
 
   <script type="module" src="/generate.js"></script>
 </body>
