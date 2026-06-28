@@ -18,6 +18,18 @@ const __dirname = path.dirname(__filename);
 // Serve the public folder
 app.use(express.static(path.join(__dirname, "../public")));
 
+// Serve the installed Leaflet library (CSS, JS, marker images)
+app.use("/leaflet", express.static(path.join(__dirname, "../node_modules/leaflet/dist")));
+
+// Serve the installed simplex-noise ESM build for the map generator
+app.use("/simplex-noise", express.static(path.join(__dirname, "../node_modules/simplex-noise/dist/esm")));
+
+// Serve jQuery (loaded as a global <script> on every page)
+app.use("/jquery", express.static(path.join(__dirname, "../node_modules/jquery/dist")));
+
+// Serve Bootstrap's compiled CSS + JS bundle (Popper included)
+app.use("/bootstrap", express.static(path.join(__dirname, "../node_modules/bootstrap/dist")));
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });

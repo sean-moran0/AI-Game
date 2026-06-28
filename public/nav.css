@@ -1,0 +1,31 @@
+/* Shared app shell, included on every page. The top navigation itself is a
+   Bootstrap navbar built by nav.ts; this file owns the page layout only. */
+:root {
+  --accent: #2f6fd8;
+  --bg: #1a1a1a;
+  --fg: #e0e0e0;
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#app-nav { flex-shrink: 0; }
+
+/* Highlight the active nav link (Bootstrap's .active is subtle on dark). */
+#app-nav .nav-link.active { color: #fff; font-weight: 600; }
+
+/* Content region below the nav. Each page styles its own interior. */
+.page {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}

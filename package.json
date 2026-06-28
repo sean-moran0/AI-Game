@@ -1,5 +1,5 @@
 {
-  "name": "ai-game",
+  "name": "ai-gen",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,15 +12,23 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@popperjs/core": "^2.11.8",
+    "@types/bootstrap": "^5.2.11",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.6",
+    "@types/jquery": "^4.0.1",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^26.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
+    "bootstrap": "^5.3.8",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "jquery": "^4.0.0",
+    "leaflet": "^1.9.4",
+    "simplex-noise": "^4.0.3"
   }
 }

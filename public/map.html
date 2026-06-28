@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Gen — Map Viewer</title>
+  <link rel="stylesheet" href="/leaflet/leaflet.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/nav.css">
+  <script src="/jquery/jquery.min.js"></script>
+  <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/leaflet/leaflet.js"></script>
+  <style>
+    #toolbar {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 1000;
+      max-width: max-content;
+      background: #1f1f1fee;
+      border: 1px solid #3a3a3a;
+      border-radius: 8px;
+    }
+    #toolbar input[type="file"] { display: none; }
+
+    #map { width: 100%; height: 100%; background: #0d0d0d; }
+  </style>
+</head>
+<body>
+  <main class="page map">
+    <div id="toolbar" class="d-flex flex-wrap align-items-center gap-2 p-2 px-3">
+      <label class="btn btn-primary btn-sm mb-0">
+        Load GeoJSON
+        <input type="file" id="file" accept=".geojson,.json,application/geo+json,application/json">
+      </label>
+      <span id="status" class="small text-secondary">No map loaded</span>
+    </div>
+    <div id="map"></div>
+  </main>
+
+  <script type="module" src="/nav.js"></script>
+  <script type="module" src="/map.js"></script>
+</body>
+</html>
