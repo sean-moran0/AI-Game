@@ -24,6 +24,12 @@ app.use("/leaflet", express.static(path.join(__dirname, "../node_modules/leaflet
 // Serve the installed simplex-noise ESM build for the map generator
 app.use("/simplex-noise", express.static(path.join(__dirname, "../node_modules/simplex-noise/dist/esm")));
 
+// Serve jQuery (loaded as a global <script> on every page)
+app.use("/jquery", express.static(path.join(__dirname, "../node_modules/jquery/dist")));
+
+// Serve Bootstrap's compiled CSS + JS bundle (Popper included)
+app.use("/bootstrap", express.static(path.join(__dirname, "../node_modules/bootstrap/dist")));
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });

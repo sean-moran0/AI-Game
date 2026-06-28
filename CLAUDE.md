@@ -15,19 +15,20 @@ The server listens on http://localhost:3000. It requires `ANTHROPIC_API_KEY` in 
 A single Express server backs three browser pages that share a top nav. The split that matters: **`src/` is compiled TypeScript (backend only); `public/` is hand-written ES-module JavaScript served as-is (never compiled).** Editing frontend behavior means editing `public/*.js` directly — those files are not part of the `tsc` build.
 
 ### Backend (`src/` → `dist/`)
-- `server.ts` — Express app. Serves `public/` statically, and re-serves two `node_modules` packages to the browser at fixed URLs: Leaflet at `/leaflet` and simplex-noise's ESM build at `/simplex-noise`. The frontend imports these by those URLs, so the paths in `server.ts` and the `import`/`<link>` paths in `public/` are coupled. Exposes `POST /api/chat`.
+- `server.ts` — Express app. Serves `public/` statically, and re-serves four `node_modules` packages to the browser at fixed URLs: Leaflet at `/leaflet`, simplex-noise's ESM build at `/simplex-noise`, jQuery at `/jquery`, and Bootstrap at `/bootstrap`. The frontend loads these by those URLs, so the paths in `server.ts` and the `import`/`<script>`/`<link>` paths are coupled. Exposes `POST /api/chat`.
 - `claude.ts` — `sendMessage()` runs the full agentic loop: streams a message, and while `stop_reason === 'tool_use'` it executes each tool, appends results, and re-calls until `end_turn`. Model is hardcoded (`claude-haiku-4-5-20251001`).
 - `tools.ts` — tool definitions plus `executeTool` dispatch. Adding a tool means adding both an entry to `toolDefinitions` and a `case` in `executeTool`'s switch.
 - `systemPrompt.ts` — the chat system prompt string.
 
 ### Frontend (`public/`)
-- `nav.js` — injected as the first `<body>` element on every page to build the shared nav before page scripts measure containers.
+The browser pages share jQuery (global `$`) and Bootstrap 5 (`data-bs-theme="dark"`, responsive grid). jQuery, Bootstrap's bundle, and (on the map page) Leaflet load as blocking `<script>` globals in `<head>`; page logic loads as `<script type="module">` at the end of `<body>`.
+- `nav.js` — builds the shared responsive Bootstrap navbar and prepends it to `<body>` on every page, before page scripts (e.g. Leaflet) measure their containers.
 - `index.html` / `index.js` — Chat UI; posts the full message history to `/api/chat`.
 - `generate.html` / `generate.js` — procedural map generator. Builds normalized elevation with seeded mulberry32 + fBm simplex noise and optional radial island falloff, classifies cells into terrain bands, renders to canvas, and exports run-length-merged GeoJSON polygons.
-- `map.html` — Map Viewer; loads a GeoJSON file and renders it with Leaflet.
+- `map.html` / `map.js` — Map Viewer; loads a GeoJSON file and renders it with Leaflet.
 
 ### Cross-file couplings to preserve
-- **Terrain colors are duplicated**: `TERRAIN` in `generate.js` and `TERRAIN_COLORS` in `map.html`. Keep them in sync or the viewer mis-colors exported maps.
+- **Terrain colors are duplicated**: `TERRAIN` in `generate.js` and `TERRAIN_COLORS` in `map.js`. Keep them in sync or the viewer mis-colors exported maps.
 - **Coordinate system**: the generator exports plain `[x, y]` grid coordinates with `y` flipped (row 0 = north), and the viewer reads them with Leaflet's `L.CRS.Simple` (not geographic lat/lng). Both ends must agree.
 
 ### TypeScript config notes

@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Gen — Chat</title>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/nav.css">
+  <script src="/jquery/jquery.min.js"></script>
+  <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
   <style>
     .page.chat { display: flex; flex-direction: column; }
 
@@ -18,7 +21,7 @@
     }
 
     .message {
-      max-width: 720px;
+      max-width: min(720px, 90%);
       width: fit-content;
       padding: 10px 14px;
       border-radius: 10px;
@@ -29,7 +32,7 @@
 
     .message.user {
       align-self: flex-end;
-      background: #2f6fd8;
+      background: var(--bs-primary);
       color: #fff;
     }
 
@@ -46,55 +49,23 @@
       color: #f08080;
     }
 
-    #input-area {
-      display: flex;
-      gap: 8px;
-      padding: 12px 16px;
-      border-top: 1px solid #2a2a2a;
-      background: #1a1a1a;
-    }
-
     #input {
-      flex: 1;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: 1px solid #3a3a3a;
-      background: #2a2a2a;
-      color: #e0e0e0;
-      font-size: 15px;
       resize: none;
-      line-height: 1.4;
       max-height: 140px;
       overflow-y: auto;
-      font-family: inherit;
     }
-
-    #input:focus { outline: none; border-color: #2f6fd8; }
-
-    #send {
-      padding: 10px 18px;
-      border-radius: 8px;
-      border: none;
-      background: #2f6fd8;
-      color: #fff;
-      font-size: 15px;
-      cursor: pointer;
-      align-self: flex-end;
-    }
-
-    #send:disabled { opacity: 0.4; cursor: not-allowed; }
-    #send:not(:disabled):hover { background: #3a7fe8; }
   </style>
 </head>
 <body>
-  <script src="/nav.js"></script>
   <main class="page chat">
     <div id="messages"></div>
-    <div id="input-area">
-      <textarea id="input" rows="1" placeholder="Type a message…"></textarea>
-      <button id="send">Send</button>
+    <div id="input-area" class="d-flex gap-2 p-3 border-top">
+      <textarea id="input" class="form-control" rows="1" placeholder="Type a message…"></textarea>
+      <button id="send" class="btn btn-primary align-self-end">Send</button>
     </div>
   </main>
-  <script src="/index.js"></script>
+
+  <script type="module" src="/nav.js"></script>
+  <script type="module" src="/index.js"></script>
 </body>
 </html>

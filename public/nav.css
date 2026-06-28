@@ -1,13 +1,10 @@
-/* Shared app shell + top navigation, included on every page. */
+/* Shared app shell, included on every page. The top navigation itself is a
+   Bootstrap navbar built by nav.ts; this file owns the page layout only. */
 :root {
-  --nav-h: 50px;
   --accent: #2f6fd8;
-  --accent-hover: #3a7fe8;
   --bg: #1a1a1a;
   --fg: #e0e0e0;
 }
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body { height: 100%; }
 
@@ -21,35 +18,10 @@ body {
   overflow: hidden;
 }
 
-#app-nav {
-  height: var(--nav-h);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0 16px;
-  background: #141414;
-  border-bottom: 1px solid #2a2a2a;
-}
+#app-nav { flex-shrink: 0; }
 
-#app-nav .brand {
-  font-weight: 600;
-  font-size: 15px;
-  margin-right: 18px;
-  letter-spacing: 0.3px;
-}
-#app-nav .brand .accent { color: var(--accent); }
-
-#app-nav a {
-  padding: 8px 14px;
-  border-radius: 6px;
-  color: #b0b0b0;
-  text-decoration: none;
-  font-size: 14px;
-  transition: background 0.12s, color 0.12s;
-}
-#app-nav a:hover { background: #242424; color: var(--fg); }
-#app-nav a.active { background: var(--accent); color: #fff; }
+/* Highlight the active nav link (Bootstrap's .active is subtle on dark). */
+#app-nav .nav-link.active { color: #fff; font-weight: 600; }
 
 /* Content region below the nav. Each page styles its own interior. */
 .page {
