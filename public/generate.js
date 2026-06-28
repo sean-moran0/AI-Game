@@ -189,7 +189,13 @@ const sliders = ["gridSize", "frequency", "octaves", "persistence", "lacunarity"
 for (const id of sliders) {
     const $el = $(`#${id}`);
     const $val = $(`#${id}-val`);
-    const sync = () => { $val.text(String($el.val())); };
+    const sync = () => {
+        $val.text(String($el.val()));
+        const min = parseFloat($el.attr("min") ?? "0");
+        const max = parseFloat($el.attr("max") ?? "100");
+        const pct = ((parseFloat(String($el.val())) - min) / (max - min)) * 100;
+        $el[0].style.setProperty("--pct", pct + "%");
+    };
     $el.on("input", () => { sync(); generate(); });
     sync();
 }

@@ -11,6 +11,20 @@
   <style>
     .page.gen { overflow: auto; }
 
+    /* Fill the track left of the thumb using a gradient keyed to a CSS custom
+       property (--pct) that generate.js updates on every sync(). Bootstrap's
+       custom range appearance doesn't expose a fill pseudo-element, so this is
+       the reliable cross-browser approach. */
+    #panel input[type="range"] {
+      --pct: 0%;
+    }
+    #panel input[type="range"]::-webkit-slider-runnable-track {
+      background: linear-gradient(to right, #2f6fd8 var(--pct), #3a3a3a var(--pct)) !important;
+    }
+    #panel input[type="range"]::-moz-range-progress {
+      background-color: #2f6fd8;
+    }
+
     .control label .val {
       color: var(--bs-primary);
       font-variant-numeric: tabular-nums;
