@@ -15,7 +15,7 @@
 
   const brand = document.createElement('span');
   brand.className = 'brand';
-  brand.innerHTML = 'AI <span class="accent">Game</span>';
+  brand.innerHTML = 'AI <span class="accent">Gen</span>';
   nav.appendChild(brand);
 
   for (const l of links) {
